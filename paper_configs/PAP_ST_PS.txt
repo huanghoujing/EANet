@@ -1,0 +1,10 @@
+cfg.model.pool_type = 'PAPool'
+cfg.model.em_dim = 256
+cfg.model.num_parts = 9
+cfg.model.use_ps = True
+cfg.dataset.im.h_w = (384, 128)
+cfg.dataset.use_pap_mask = True
+cfg.dataset.use_ps_label = True
+cfg.dataset.test.names = [cfg.dataset.cd_train.name]
+cfg.src_ps_loss.weight = 1
+cfg.cd_ps_loss.weight = 1

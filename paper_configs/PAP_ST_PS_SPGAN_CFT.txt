@@ -1,0 +1,23 @@
+# NOTE: In clustering and finetuning (CFT), the unlabeled domain is named `source
+# domain` here, and cross-domain model/data/loss are not used. That is, we treat CFT
+# as a single-domain training problem.
+
+cfg.model.pool_type = 'PAPool'
+cfg.model.em_dim = 256
+cfg.model.num_parts = 9
+cfg.model.use_ps = True
+cfg.dataset.im.h_w = (384, 128)
+cfg.dataset.use_pap_mask = True
+cfg.dataset.use_ps_label = True
+cfg.dataset.train.name = 'duke'
+cfg.dataset.test.names = [cfg.dataset.train.name]
+cfg.src_ps_loss.weight = 1
+
+cfg.optim.ft_lr = 0.001
+cfg.optim.new_params_lr = 0.002
+# Don't decay
+cfg.optim.lr_decay_epochs = (10000,)
+cfg.optim.normal_epochs = 5
+cfg.optim.pretrain_new_params_epochs = 6
+cfg.optim.epochs_per_val = 1
+cfg.optim.cft = True

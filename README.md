@@ -2,7 +2,7 @@
 
 # Introduction
 
-The code for our paper *EANet: Enhancing Alignment for Cross-Domain Person Re-identification* (To be visible on arXiv. [An article written in Chinese](https://zhuanlan.zhihu.com/p/53660395)).
+The code for our paper *EANet: Enhancing Alignment for Cross-Domain Person Re-identification* (To be visible on arXiv. [An article written in Chinese](https://zhuanlan.zhihu.com/p/53660395). [Pre-arXiv PDF](misc/EANet_w_supp_pre_public.pdf).).
 - Almost all experiments, with trained models
 - Used data
 - Easy-to-extend framework

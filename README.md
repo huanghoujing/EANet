@@ -7,7 +7,7 @@ The code for our paper *EANet: Enhancing Alignment for Cross-Domain Person Re-id
 - Used data
 - Easy-to-extend framework
 
-![](misc/model_low_res.png)
+![](misc/model.png)
 
 # Installation
 

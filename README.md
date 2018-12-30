@@ -1,5 +1,14 @@
 # [EANet: Enhancing Alignment for Cross-Domain Person Re-identification]()
 
+# Introduction
+
+The code for our paper *EANet: Enhancing Alignment for Cross-Domain Person Re-identification* (To be visible on arXiv. [An article written in Chinese](https://zhuanlan.zhihu.com/p/53660395)).
+- Almost all experiments, with trained models
+- Used data
+- Easy-to-extend framework
+
+![](misc/model_low_res.png)
+
 # Installation
 
 - Python 2.7 (Recommend to use [Anaconda](https://www.anaconda.com/download/) for easy package management.)

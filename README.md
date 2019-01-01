@@ -1,13 +1,13 @@
-# [EANet: Enhancing Alignment for Cross-Domain Person Re-identification]()
-
 # Introduction
 
-The code for our paper *EANet: Enhancing Alignment for Cross-Domain Person Re-identification* (To be visible on arXiv. [An article written in Chinese](https://zhuanlan.zhihu.com/p/53660395). [Pre-arXiv PDF](misc/EANet_w_supp_pre_public.pdf).).
+The code for our paper [*EANet: Enhancing Alignment for Cross-Domain Person Re-identification*](https://arxiv.org/abs/1812.11369). A Chinese version of introduction for this paper can be found [here](https://zhuanlan.zhihu.com/p/53660395).
+
+![](misc/model.png)
+
+This repository provides
 - Almost all experiments, with trained models
 - Used data
 - Easy-to-extend framework
-
-![](misc/model.png)
 
 # Installation
 

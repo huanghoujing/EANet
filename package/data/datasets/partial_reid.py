@@ -32,6 +32,8 @@ class PartialREID(Dataset):
     def save_split(self, spec, save_path):
         cfg = self.cfg
         im_paths = sorted(get_files_by_pattern(self.root, pattern=spec['pattern'], strip_root=True))
+        assert len(im_paths) > 0, "There are {} images for split [{}] of dataset [{}]. Please place your dataset in right position." \
+            .format(len(im_paths), cfg.split, self.__class__.__name__)
         # The dataset does not annotate camera. Here we manually set query camera to 0, gallery to 1, to satisfy the testing code.
         ids = [self.parse_im_path(p) for p in im_paths]
         cams = [0 if cfg.split in ['query', 'occ_query', 'partial_query'] else 1 for _ in im_paths]

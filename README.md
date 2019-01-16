@@ -119,7 +119,7 @@ Part segmentation label for each image is a single-channel PNG file, with same r
 - **(Almost) All** experiments of the paper is in `script/exp/train_all.sh`. Look at it for details.
 - To test **(almost) all** models of the paper. Download and place the trained models in the following structure
     ```
-    ${project_dir}/exp/test_paper_models
+    ${project_dir}/exp/eanet/test_paper_models
     ├── GlobalPool
     │   ├── cuhk03_np_detected_jpg
     │   │   └── ckpt.pth
@@ -285,5 +285,10 @@ We heavily use `dict` for passing data / configuration arguments when calling fu
 
 If you find our work useful, please kindly cite our paper:
 ```
-
+@article{huang2018eanet,
+  title={EANet: Enhancing Alignment for Cross-Domain Person Re-identification},
+  author={Huang, Houjing and Yang, Wenjie and Chen, Xiaotang and Zhao, Xin and Huang, Kaiqi and Lin, Jinbin and Huang, Guan and Du, Dalong},
+  journal={arXiv preprint arXiv:1812.11369},
+  year={2018}
+}
 ```

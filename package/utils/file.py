@@ -89,14 +89,23 @@ def get_files_by_pattern(root, pattern='a/b/*.ext', strip_root=False):
     return ret
 
 
-def walkdir(folder, ext=None):
+def walkdir(folder, ext=None, sub_path=False, abs_path=False):
     """Walk through each files in a directory.
     Reference: https://github.com/tqdm/tqdm/wiki/How-to-make-a-great-Progress-Bar
+    Args:
+        ext: file extension
+        sub_path: whether to exclude `folder` in the resulting paths, remaining sub paths
+        abs_path: whether to return absolute paths
     """
     for dirpath, dirs, files in os.walk(folder):
         for filename in files:
             if (ext is None) or (os.path.splitext(filename)[1] == ext):
-                yield os.path.abspath(os.path.join(dirpath, filename))
+                path = os.path.join(dirpath, filename)
+                if sub_path:
+                    path = path[len(folder) + 1:]
+                elif abs_path:
+                    path = os.path.abspath(path)
+                yield path
 
 
 def strip_root(path):

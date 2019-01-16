@@ -38,6 +38,8 @@ class MSMT17(Dataset):
     def save_split(self, spec, save_path):
         cfg = self.cfg
         im_paths = spec['im_paths']
+        assert len(im_paths) > 0, "There are {} images for split [{}] of dataset [{}]. Please place your dataset in right position." \
+            .format(len(im_paths), cfg.split, self.__class__.__name__)
         ids, cams = zip(*[self.parse_im_path(p) for p in im_paths])
         if spec['map_label']:
             unique_ids = sorted(list(set(ids)))

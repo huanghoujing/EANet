@@ -43,6 +43,8 @@ class Market1501(Dataset):
     def save_split(self, spec, save_path):
         cfg = self.cfg
         im_paths = sorted(get_files_by_pattern(self.root, pattern=spec['pattern'], strip_root=True))
+        assert len(im_paths) > 0, "There are {} images for split [{}] of dataset [{}]. Please place your dataset in right position."\
+            .format(len(im_paths), cfg.split, self.__class__.__name__)
         ids, cams = zip(*[self.parse_im_path(p) for p in im_paths])
         # Filter out id -1 which is officially not used
         im_paths, ids, cams = zip(*[(im_path, id, cam) for im_path, id, cam in zip(im_paths, ids, cams) if id != -1])

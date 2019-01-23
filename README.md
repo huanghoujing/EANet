@@ -50,7 +50,7 @@ ${project_dir}/dataset
         im_name_to_kpt.pkl
         im_name_to_h_w.pkl
 ```
-Keypoints and part segmentation labels: [Baidu Cloud](https://pan.baidu.com/s/1Mm2gWO-Xg3wiyCd6SEAWaA) or [Google Drive](https://drive.google.com/open?id=1BARSoobjTAPeOSOM-HnGzlOYTj1l9-Qs).
+Keypoints and part segmentation labels: [Baidu Cloud](https://pan.baidu.com/s/1Mm2gWO-Xg3wiyCd6SEAWaA) or [Google Drive](https://drive.google.com/open?id=1BARSoobjTAPeOSOM-HnGzlOYTj1l9-Qs). Our keypoint model is currently not public, while [this repo](https://github.com/Microsoft/human-pose-estimation.pytorch) can be an alternative. For part segmentation, we release our code at [this repo](https://github.com/huanghoujing/PyTorch-Encoding).
 
 ### Keypoint Format
 

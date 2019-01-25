@@ -103,9 +103,9 @@ Part segmentation label for each image is a single-channel PNG file, with same r
 }
 ```
 
-# Train/Test Example
+# Train/Test/Inference Example
 
-- My trained models: [Baidu Cloud](https://pan.baidu.com/s/1Mm2gWO-Xg3wiyCd6SEAWaA) or [Google Drive](https://drive.google.com/open?id=1BARSoobjTAPeOSOM-HnGzlOYTj1l9-Qs).
+- Our trained models: [Baidu Cloud](https://pan.baidu.com/s/1Mm2gWO-Xg3wiyCd6SEAWaA) or [Google Drive](https://drive.google.com/open?id=1BARSoobjTAPeOSOM-HnGzlOYTj1l9-Qs).
 - Train model `GlobalPool` on `market1501`
     ```bash
     cd ${project_dir}
@@ -116,6 +116,20 @@ Part segmentation label for each image is a single-channel PNG file, with same r
     cd ${project_dir}
     CUDA_VISIBLE_DEVICES=0 python -m package.optim.eanet_trainer --exp_dir exp/eanet/GlobalPool/market1501 --cfg_file package/config/default.py --ow_file paper_configs/GlobalPool.txt --ow_str "cfg.dataset.train.name = 'market1501'; cfg.only_test = True"
     ```
+- Users can also use a trained model for inference on their own images, with or without identity labels. `script/exp/visualize_rank_list.py` takes a query image directory and a gallery directory, and then visualize the retrieving results. E.g. use PCB trained on Market1501 to perform retrieving on Market1501 query and gallery images. Make sure directory `exp_dir` exists and the `ckpt.pth` is inside it.
+    ```bash
+    CUDA_VISIBLE_DEVICES=0 \
+    python script/exp/visualize_rank_list.py \
+    --exp_dir exp/vis_rank_list_PCB_M_to_M_id_aware \
+    --cfg_file package/config/default.py \
+    --ow_file paper_configs/PCB.txt \
+    --ow_str "cfg.only_infer = True" \
+    --q_im_dir dataset/market1501/Market-1501-v15.09.15/query \
+    --g_im_dir dataset/market1501/Market-1501-v15.09.15/bounding_box_test \
+    --save_dir exp/vis_rank_list_PCB_M_to_M_id_aware/result \
+    --id_aware true
+    ```
+  The result is shown in `misc/PCB_rank_list_M_to_M`.
 - **(Almost) All** experiments of the paper is in `script/exp/train_all.sh`. Look at it for details.
 - To test **(almost) all** models of the paper. Download and place the trained models in the following structure
     ```
@@ -227,6 +241,35 @@ CUDA_VISIBLE_DEVICES=0 python -m package.optim.${trainer} --exp_dir ${exp_dir} -
 ### Testing
 
 Test sets and testing interval can be set in config file, and the training script will test the model during training. If you want to test a trained model, create a `exp_dir` and place the `ckpt.pth` inside it, then set `cfg.only_test = True` in `${config_file}` and run `package/optim/eanet_trainer.py`. In this case, the code only performs testing. 
+
+### Inference
+
+To use a trained model for inference (extracting feature), the overall logic is
+1. Create a `exp_dir` and place the `ckpt.pth` inside it
+2. Set `cfg.only_infer = True`
+3. `trainer = EANetTrainer()`, then try `trainer.infer_one_im` or `trainer.infer_im_list` or `trainer.infer_dataloader`, which is flexible.
+
+**NOTE:** Our model inference (feature extractor) can be used as an API, not just run in command line. For example, if you want to use PCB feature extractor trained on Market1501 in another project, you can add our package path to `$PYTHONPATH`. Then in your project, do something like this
+```python
+from package.optim.eanet_trainer import EANetTrainer
+from package.eval.np_distance import compute_dist
+from easydict import EasyDict
+
+args = EasyDict()
+args.exp_dir = 'exp/try_pcb_trained_on_market1501_for_reid_feature'  # There should be the corresponding `ckpt.pth` in it
+args.cfg_file = '${EANet_PROJECT_DIR}/package/config/default.py'  # Set this `${EANet_PROJECT_DIR}`
+args.ow_file = '${EANet_PROJECT_DIR}/paper_configs/PCB.txt'  # Set this `${EANet_PROJECT_DIR}`
+args.ow_str = "cfg.only_infer = True"
+
+eanet_trainer = EANetTrainer(args=args)
+feature_dict1 = eanet_trainer.infer_one_im(im_path='YOUR/IMAGE/PATH/1.jpg', squeeze=False)  # You can also provide PIL Image instead of image path
+feature_dict2 = eanet_trainer.infer_one_im(im_path='YOUR/IMAGE/PATH/2.jpg', squeeze=False)  # You can also provide PIL Image instead of image path
+cosine_distance = compute_dist(feature_dict1['feat'], feature_dict2['feat'])[0][0]
+```
+
+**NOTE:** For your own images, if you want to perform Part Aligned Pooling for inference, you have to provide keypoint generated `pap_mask`. Though, as alternatives you can use GlobalPool or PCB, which also achieve satisfactory performance in our implementation.
+
+For details of inference, refer to `package/optim/reid_trainer.py`.
 
 ### Extension: Dataset
 

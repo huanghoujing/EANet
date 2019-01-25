@@ -153,3 +153,4 @@ cfg.optim.cft = False  #
 cfg.optim.cft_iters = 1  #
 cfg.optim.cft_rho = 8e-4
 cfg.only_test = False  #
+cfg.only_infer = False  #

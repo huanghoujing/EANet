@@ -115,8 +115,8 @@ class TripletLoss(Loss):
         # Calculation
         cfg = self.cfg
         res1 = self.calculate(torch.cat(pred['feat_list'][:6], 1), batch['label'], hard_type=hard_type)
-        res2 = self.calculate(torch.cat(pred['feat_list'][7:9], 1), batch['label'], hard_type=hard_type)
-        res3 = self.calculate(pred['feat_list'][9], batch['label'], hard_type=hard_type)
+        res2 = self.calculate(torch.cat(pred['feat_list'][6:8], 1), batch['label'], hard_type=hard_type)
+        res3 = self.calculate(pred['feat_list'][8], batch['label'], hard_type=hard_type)
         loss = res1['loss'] + res2['loss'] + res3['loss']
 
         # Meter

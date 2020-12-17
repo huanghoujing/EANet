@@ -104,7 +104,7 @@ def cmc(
     return ret, is_valid_query
 
 
-def mean_ap(
+def mean_ap_deprecated(
         distmat,
         query_ids=None,
         gallery_ids=None,
@@ -173,6 +173,79 @@ def mean_ap(
         if not np.any(y_true): continue
         is_valid_query[i] = 1
         aps[i] = average_precision_score(y_true, y_score)
+    if len(aps) == 0:
+        raise RuntimeError("No valid query")
+    if average:
+        return float(np.sum(aps)) / np.sum(is_valid_query)
+    return aps, is_valid_query
+
+
+# hhj
+# Modified from https://github.com/layumi/Person_reID_baseline_pytorch/blob/master/evaluate.py
+def ap_zzd(y_true, y_score):
+    ngood = y_true.sum()
+    d_recall = 1.0 / ngood
+    rows_good = np.argwhere(y_true).flatten()
+    ap = 0
+    for i in range(ngood):
+        precision = (i + 1) * 1.0 / (rows_good[i] + 1)
+        if rows_good[i] != 0:
+            old_precision = i * 1.0 / rows_good[i]
+        else:
+            old_precision = 1.0
+        ap = ap + d_recall * (old_precision + precision) / 2
+    return ap
+
+
+def mean_ap(
+        distmat,
+        query_ids=None,
+        gallery_ids=None,
+        query_cams=None,
+        gallery_cams=None,
+        average=True):
+    """
+    Args:
+        distmat: numpy array with shape [num_query, num_gallery], the
+            pairwise distance between query and gallery samples
+        query_ids: numpy array with shape [num_query]
+        gallery_ids: numpy array with shape [num_gallery]
+        query_cams: numpy array with shape [num_query]
+        gallery_cams: numpy array with shape [num_gallery]
+        average: whether to average the results across queries
+    Returns:
+        If `average` is `False`:
+            ret: numpy array with shape [num_query]
+            is_valid_query: numpy array with shape [num_query], containing 0's and
+                1's, whether each query is valid or not
+        If `average` is `True`:
+            a scalar
+    """
+
+    # Ensure numpy array
+    assert isinstance(distmat, np.ndarray)
+    assert isinstance(query_ids, np.ndarray)
+    assert isinstance(gallery_ids, np.ndarray)
+    assert isinstance(query_cams, np.ndarray)
+    assert isinstance(gallery_cams, np.ndarray)
+
+    m, n = distmat.shape
+
+    # Sort and find correct matches
+    indices = np.argsort(distmat, axis=1)
+    matches = (gallery_ids[indices] == query_ids[:, np.newaxis])
+    # Compute AP for each query
+    aps = np.zeros(m)
+    is_valid_query = np.zeros(m)
+    for i in range(m):
+        # Filter out the same id and same camera
+        valid = ((gallery_ids[indices[i]] != query_ids[i]) |
+                 (gallery_cams[indices[i]] != query_cams[i]))
+        y_true = matches[i, valid]
+        y_score = -distmat[i][indices[i]][valid]
+        if not np.any(y_true): continue
+        is_valid_query[i] = 1
+        aps[i] = ap_zzd(y_true, y_score)
     if len(aps) == 0:
         raise RuntimeError("No valid query")
     if average:

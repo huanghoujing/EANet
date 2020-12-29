@@ -91,6 +91,7 @@ cfg.eval.separate_camera_set = False
 cfg.eval.single_gallery_shot = False
 cfg.eval.first_match_break = True
 cfg.eval.score_prefix = ''
+cfg.eval.rerank = False  # Set this to `True` to use re-ranking during testing
 
 cfg.train = EasyDict()
 

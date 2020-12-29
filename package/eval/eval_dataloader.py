@@ -1,6 +1,6 @@
 from __future__ import print_function
 from .extract_feat import extract_dataloader_feat
-from .eval_feat import eval_feat
+from .eval_feat import eval_feat, eval_feat_rerank
 
 
 def _print_stat(dic):
@@ -30,4 +30,7 @@ def eval_dataloader(model, q_loader, g_loader, cfg):
     if 'visible' in g_feat_dict:
         dic['g_visible'] = g_feat_dict['visible']
     _print_stat(dic)
-    return eval_feat(dic, cfg)
+    ret = eval_feat(dic, cfg)
+    if cfg.rerank:
+        eval_feat_rerank(dic, cfg)
+    return ret
